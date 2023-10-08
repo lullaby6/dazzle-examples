@@ -81,14 +81,12 @@ const game = new Game({
                 }
             },
             update: current => {
-                if(!current.boardPause) {
-                    current.getGameObjectByTag('cell').forEach(cell => {
-                        cell.checkNieghbors(cell)
-                    })
-                    current.getGameObjectByTag('cell').forEach(cell => {
-                        cell.updateLife(cell)
-                    })
-                }
+                current.getGameObjectByTag('cell').forEach(cell => {
+                    cell.checkNieghbors(cell)
+                })
+                current.getGameObjectByTag('cell').forEach(cell => {
+                    cell.updateLife(cell)
+                })
             },
         }
     },
