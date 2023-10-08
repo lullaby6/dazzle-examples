@@ -31,12 +31,12 @@ const Cell = {
             if(current.alive){
                 if(current.neighbors < 2 || current.neighbors > 3) {
                     current.alive = false
-                    current.scene.board[boardPos.x][boardPos.y] = 0
+                    current.scene.board[current.boardPos.x][current.boardPos.y] = 0
                 }
             }else{
                 if(current.neighbors == 3) {
                     current.alive = true
-                    current.scene.board[boardPos.x][boardPos.y] = 1
+                    current.scene.board[current.boardPos.x][current.boardPos.y] = 1
                 }
             }
 
