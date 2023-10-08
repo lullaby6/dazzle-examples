@@ -1,5 +1,3 @@
-import {Game, positionsMatch, randomFloatFromInterval, getDifference, randomIntFromInterval, isInside, randomItemFromArray} from '../Dazzle.js'
-
 const Ball = {
     color: '#f5f5f5',
     width: 20,

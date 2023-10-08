@@ -1,5 +1,3 @@
-import {Game, positionsMatch, randomFloatFromInterval, getDifference, randomIntFromInterval, isInside} from '../Dazzle.js'
-
 const SnakeBody = {
     color: '#111',
     load: current => {
