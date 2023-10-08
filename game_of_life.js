@@ -1,4 +1,4 @@
-const CELL_SIZE = 25
+const CELL_SIZE = 20
 const BOARD_SIZE = 20
 
 const Cell = {
@@ -47,6 +47,19 @@ const Cell = {
         current.color = current.alive ? '#000' : '#fff'
 
         current.boardPos = {x: current.x / CELL_SIZE, y: current.y / CELL_SIZE}
+    },
+    mouseDown: ({event, current}) => {
+        if(isInside(current.scene.game.getMouse, current)){
+            if(event.button === 0) {
+                current.alive = true
+                current.scene.board[current.boardPos.x][current.boardPos.y] = 1
+                current.color = current.alive ? '#000' : '#fff'
+            }else {
+                current.alive = false
+                current.scene.board[current.boardPos.x][current.boardPos.y] = 0
+                current.color = current.alive ? '#000' : '#fff'
+            }
+        }
     }
 }
 
@@ -56,7 +69,10 @@ const game = new Game({
     height: CELL_SIZE * BOARD_SIZE,
     scenes: {
         main: {
-            custom: { board: [] },
+            custom: {
+                board: [],
+                boardPause: false
+            },
             load: current => {
                 //creating BOARD_SIZE * BOARD_SIZE board
                 for (let row = 0; row < BOARD_SIZE; row++) {
@@ -77,7 +93,8 @@ const game = new Game({
                         })
 
                         //50% chance of alive
-                        if(randomItemFromArray([true, false])) {
+                        const aliveChance = randomItemFromArray([true, false])
+                        if(aliveChance) {
                             createdCell.alive = true
                             //updating board
                             current.board[row_index][col_index] = 1
@@ -89,11 +106,27 @@ const game = new Game({
                 const cells = current.getGameObjectByTag('cell')
 
                 cells.forEach(cell => cell.checkNieghbors(cell))
-                cells.forEach(cell => cell.updateLife(cell))
+                if(!current.boardPause) cells.forEach(cell => cell.updateLife(cell))
             },
+            keyDown: ({event, current}) => {
+                if(event.key == 'r') {
+                    const cells = current.getGameObjectByTag('cell')
+
+                    cells.forEach(cell => {
+                        const aliveChance = randomItemFromArray([true, false])
+                        if(aliveChance) {
+                            cell.alive = true
+                            current.board[cell.boardPos.x][cell.boardPos.y] = 1
+                        }else{
+                            cell.alive = false
+                            current.board[cell.boardPos.x][cell.boardPos.y] = 0
+                        }
+                    })
+
+                    cells.forEach(cell => cell.checkNieghbors(cell))
+                    cells.forEach(cell => cell.updateLife(cell))
+                }else if(event.key == 'p') current.boardPause = !current.boardPause
+            }
         }
     },
-    keyDown: ({event, current}) => {
-        if(event.key == 'r') window.location.reload()
-    }
 })
