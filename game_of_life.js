@@ -58,6 +58,7 @@ const game = new Game({
         main: {
             custom: { board: [] },
             load: current => {
+                //creating BOARD_SIZE * BOARD_SIZE board
                 for (let row = 0; row < BOARD_SIZE; row++) {
                     const row = new Array(BOARD_SIZE)
                     for (let col = 0; col < row.length; col++) {
@@ -65,6 +66,8 @@ const game = new Game({
                     }
                     current.board.push(row)
                 }
+
+                //creating cells
                 for (let row_index = 0; row_index < current.board.length; row_index++){
                     for (let col_index = 0; col_index < current.board[row_index].length; col_index++){
                         const createdCell = current.instantGameObject({
@@ -73,20 +76,20 @@ const game = new Game({
                             y: col_index * CELL_SIZE,
                         })
 
+                        //50% chance of alive
                         if(randomItemFromArray([true, false])) {
                             createdCell.alive = true
+                            //updating board
                             current.board[row_index][col_index] = 1
                         }
                     }
                 }
             },
             update: current => {
-                current.getGameObjectByTag('cell').forEach(cell => {
-                    cell.checkNieghbors(cell)
-                })
-                current.getGameObjectByTag('cell').forEach(cell => {
-                    cell.updateLife(cell)
-                })
+                const cells = current.getGameObjectByTag('cell')
+
+                cells.forEach(cell => cell.checkNieghbors(cell))
+                cells.forEach(cell => cell.updateLife(cell))
             },
         }
     },
